@@ -1,0 +1,6 @@
+﻿  FunctionSampling.cpp
+c:\users\wangdongliang.cyou-inc\source\repos\profilertest\gameprofiler\functionsampling.cpp(50): warning C4477: “printf”: 格式字符串“%08X”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“ULONG64”
+  c:\users\wangdongliang.cyou-inc\source\repos\profilertest\gameprofiler\functionsampling.cpp(50): note: 请考虑在格式字符串中使用“%llX”
+  c:\users\wangdongliang.cyou-inc\source\repos\profilertest\gameprofiler\functionsampling.cpp(50): note: 请考虑在格式字符串中使用“%IX”
+  c:\users\wangdongliang.cyou-inc\source\repos\profilertest\gameprofiler\functionsampling.cpp(50): note: 请考虑在格式字符串中使用“%I64X”
+  GameProfiler.vcxproj -> C:\Users\wangdongliang.CYOU-INC\source\repos\profilerTest\x64\Debug\GameProfiler.exe

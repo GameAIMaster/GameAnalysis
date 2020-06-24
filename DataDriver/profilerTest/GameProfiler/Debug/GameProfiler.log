@@ -1,0 +1,5 @@
+﻿FunctionSampling.obj : error LNK2019: 无法解析的外部符号 __imp__SymCleanup@4，该符号在函数 _main 中被引用
+FunctionSampling.obj : error LNK2019: 无法解析的外部符号 __imp__SymInitialize@12，该符号在函数 _main 中被引用
+FunctionSampling.obj : error LNK2019: 无法解析的外部符号 __imp__SymFromName@12，该符号在函数 _main 中被引用
+FunctionSampling.obj : error LNK2019: 无法解析的外部符号 __imp__SymRefreshModuleList@4，该符号在函数 _main 中被引用
+C:\Users\wangdongliang.CYOU-INC\source\repos\profilerTest\Debug\GameProfiler.exe : fatal error LNK1120: 4 个无法解析的外部命令
