@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+#include "pch.h"
 #include <windows.h>
 #include <minwindef.h>
 #include <stdio.h>
@@ -19,7 +19,7 @@
 #define JMP_CMD_SIZE 6  
 
 char* InsertOpCode(
-	char* dst_buffer, char* op_code, uint32_t op_size,
+	char* dst_buffer, const char* op_code, uint32_t op_size,
 	char* arg, uint32_t arg_size
 )
 {
@@ -80,7 +80,7 @@ int main()
 	symbol_info_point->SizeOfStruct = sizeof(SYMBOL_INFO);
 	symbol_info_point->MaxNameLen = sizeof(memory) - sizeof(SYMBOL_INFO);
 	// TODO 不应该返回BOOL值
-	BOOL ret_from = SymFromName(process_handle, "TestProj!TargetFunc", symbol_info_point);
+	BOOL ret_from = SymFromName(process_handle, "profilerTest!TestFunc", symbol_info_point);
 	if (ret_from == FALSE)
 	{
 		SymCleanup(process_handle);
@@ -139,7 +139,8 @@ int main()
 	code_offset = InsertOpCode(code_offset, "\x89\x05", 2, (char*)&Ret, 4);
 	//mov [Tick + 4], edx 
 	code_offset = InsertOpCode(code_offset, "\x89\x15", 2, (char*)&RetHigh32, 4);
-	//pop ecx; push edx; push eax
+	//pop ecx; pop edx; pop eax
+	code_offset = InsertOpCode(code_offset, "\x5A\x59\x58", 3, NULL, 0);
 	code_offset = InsertOpCode(code_offset, "\xC3", 1, NULL, 0);
 	uint32_t ret_call_size = code_offset - code_buffer;
 
@@ -164,7 +165,7 @@ int main()
 	code_offset = InsertOpCode(code_offset, "\x89\x05", 2, (char*)&Tick, 4);
 	//mov [Tick + 4], edx 
 	code_offset = InsertOpCode(code_offset, "\x89\x15", 2, (char*)&TickHigh32, 4);
-	//pop ecx; push edx; push eax
+	//pop ecx; pop edx; pop eax
 	code_offset = InsertOpCode(code_offset, "\x5A\x59\x58", 3, NULL, 0);
 	code_offset = InsertOpCode(code_offset, move_code, move_size, NULL, 0);
 	code_offset = InsertOpCode(code_offset, "\xFF\x25", 2, (char*)&restore_jmp, 4);
