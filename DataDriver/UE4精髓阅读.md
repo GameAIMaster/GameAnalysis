@@ -80,7 +80,32 @@ UHT收集完成数据后，需要将数据保存到数据结构中，结构如�
 
 UHT类似于语法分析器，具体没有详细了解，类似做过的功能则是语法分析器，通过正则表达式描述语法，收集足够的数据信息。
 
-生成代码中DECLARE_CLASS 是最重要的一个声明 
+生成代码中DECLARE_CLASS 是最重要的一个声明 ，GetStaticClass是常用的方法，它会调用GetPrivateStaticClass，里面会传入package名，Package的概念涉及到后续Object的组织方式，目前可以简单理解为一个大的Object包含了其他子Object。
+
+生成的代码中包含了收集、注册、链接等流程。一是各种Z_辅助方法用来构造出各种UClass*等对象；另一部分是都包含着一两个static对象用来在程序启动的时候驱动登记，继而调用到前者的Z_方法，最终完成注册。
+
+#### 收集
+
+```c++
+UClass* UMyClass::GetPrivateStaticClass(const TCHAR* Package)
+UProperty* NewProp_Score = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("Score"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(Score, UMyClass), 0x0010000000000004);//添加属性
+//添加方法
+OuterClass->LinkChild(Z_Construct_UFunction_UMyClass_CallableFunc());
+OuterClass->AddFunctionToFunctionMapWithOverriddenName (Z_Construct_UFunction_UMyClass_CallableFunc(), "CallableFunc"); // 774395847
+```
+
+#### 注册
+
+```C++
+IMPLEMENT_CLASS(UMyInterface, 4286549343);  //注册类
+//什么时候延迟注册
+```
+
+#### 链接
+
+```c++
+OuterClass->StaticLink();
+```
 
 
 
