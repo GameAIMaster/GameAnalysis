@@ -94,6 +94,11 @@ OuterClass->LinkChild(Z_Construct_UFunction_UMyClass_CallableFunc());
 OuterClass->AddFunctionToFunctionMapWithOverriddenName (Z_Construct_UFunction_UMyClass_CallableFunc(), "CallableFunc"); // 774395847
 ```
 
+UClassCompiledInDefer来收集类名字，类大小，CRC信息，并把自己的指针保存进来以便后续调用Register方法。而UObjectCompiledInDefer最重要的收集的信息就是第一个用于构造UClass*对象的函数指针回调。
+
+**思考：为何需要TClassCompiledInDefer和FCompiledInDefer两个静态初始化来登记？**
+我们也观察到了这二者是一一对应的，问题是为何需要两个静态对象来分别收集，为何不合二为一？关键在于我们首先要明白它们二者的不同之处，前者的目的主要是为后续提供一个TClass::StaticClass的Register方法（其会触发GetPrivateStaticClassBody的调用，进而创建出UClass*对象），而后者的目的是在其UClass*身上继续调用构造函数，初始化属性和函数,元数据注册等操作。我们可以简单理解为就像是C++中new对象的两个步骤，首先分配内存，继而在该内存上构造对象。我们在后续的注册章节里还会继续讨论到这个问题。
+
 #### 注册
 
 一一种直接的方式是在程序启动后手动的一个个调用注册函数 ，另一种是自动注冊模式只能在独立的地址空间才能有效，如果该文件被静态链接且没有被引用到的话则很可能会绕过static的初始化。不过UE因为都是dll动态链接，且没有出现静态lib再引用Lib，然后又不引用文件的情况出现，所以避免了该问题。或者你也可以找个地方强制的去include一下来触发static初始化。 
